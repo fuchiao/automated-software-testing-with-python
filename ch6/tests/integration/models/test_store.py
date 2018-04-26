@@ -6,27 +6,34 @@ from db import reset_db, Session
 class TestStore(TestCase):
     def setUp(self):
         reset_db()
+        self.sess = Session()
+
+    def tearDown(self):
+        self.sess.close()
 
     def test_create_store(self):
         store = StoreModel('testStore')
-        self.assertListEqual(store.items.all(), [])
+        self.assertEqual(store.items.count(), 0)
 
     def test_crud(self):
         store = StoreModel('testStore')
-        self.assertIsNone(StoreModel.find_by_name('testStore'))
+        self.assertEqual(self.sess.query(StoreModel).filter(StoreModel.name=='testStore').count(), 0)
 
-        store.save()
-        self.assertIsNotNone(StoreModel.find_by_name('testStore'))
+        self.sess.add(store)
+        self.sess.commit()
+        self.assertEqual(self.sess.query(StoreModel).filter(StoreModel.name=='testStore').count(), 1)
 
-        store.delete()
-        self.assertIsNone(StoreModel.find_by_name('testStore'))
+        self.sess.delete(store)
+        self.sess.commit()
+        self.assertEqual(self.sess.query(StoreModel).filter(StoreModel.name=='testStore').count(), 0)
 
     def test_store_relationship(self):
         store = StoreModel('testStore')
         item = ItemModel('testItem', 12.99, 1)
-        store.save()
-        item.save()
-        items = ItemModel.filter_by_store(1)
+        self.sess.add(store)
+        self.sess.add(item)
+        self.sess.commit()
+        items = self.sess.query(ItemModel).filter(ItemModel.store_id==1).all()
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0].name, 'testItem')
 

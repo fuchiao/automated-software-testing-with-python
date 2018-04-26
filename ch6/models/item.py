@@ -15,30 +15,14 @@ class ItemModel(Base):
         self.price = price
         self.store_id = store_id
 
-    def save(self):
-        sess = Session()
-        sess.add(self)
-        sess.commit()
-        sess.close()
-
-    def delete(self):
-        sess = Session()
-        sess.delete(self)
-        sess.commit()
-        sess.close()
-
     @classmethod
-    def filter_by_name(cls, name):
-        sess = Session()
+    def filter_by_name(cls, name, sess):
         item = sess.query(cls).filter(ItemModel.name==name).first()
-        sess.close()
         return item
 
     @classmethod
-    def filter_by_store(cls, store_id):
-        sess = Session()
+    def filter_by_store(cls, store_id, sess):
         items = sess.query(cls).filter(ItemModel.store_id==store_id).all()
-        sess.close()
         return items
 
     def json(self):
