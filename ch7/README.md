@@ -1,15 +1,22 @@
-# ch6 #
+# ch7 #
 
 ----
 
-this codes are adapted from ch5
+this codes are adapted from ch6
 
 we add some new feature
 
-* add store model and use foreign key
-* add tests for foreign key
+* add userModel and allow users login
+* implement resources
+* authentication by jwt
+* add system tests for resources and authentication
 
-sqlite does not support foreign key, so we replace with postgresql
+Reference
+
+* https://github.com/trendiguru/falcon-jwt/blob/master/falcon_jwt.py
+* https://eshlox.net/2017/07/28/integrate-sqlalchemy-with-falcon-framework/
+* http://tech.colla.me/zh/show/token_session_cookie
+* http://falcon.readthedocs.io/en/stable/user/quickstart.html
 
 run database service on docker
 ```
@@ -23,17 +30,6 @@ reset tables
 ```
 $ env DB_URI=127.0.0.1  python db.py
 ```
-
-Also, I made some change
-* replace `ItemModel.filter_by_name()` with `sess.query(ItemModel).filter()`
-* replace `store.items.all()` with `sess.query(ItemModel).filter()`
-* remove session manipulation from Model class
-
-Here are my reasons
-* `store.items.all()` always failed, and I don't know why
-* I want to implement them in similiar way
-* `sess.query()` seems more popular
-* in testing, setUp() can prepare session for each test; in falcon, a middleware can prepare session for each request. Therefore, I remove session manipulation from Model class
 
 TODO: create a session for every request and rollback if something fails
 https://eshlox.net/2017/07/28/integrate-sqlalchemy-with-falcon-framework/

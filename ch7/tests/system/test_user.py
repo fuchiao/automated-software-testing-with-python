@@ -1,6 +1,6 @@
 from falcon import testing
-from db import reset_db
 from app import app
+from db import reset_db, Session
 
 class TestUser(testing.TestCase):
     def setUp(self):

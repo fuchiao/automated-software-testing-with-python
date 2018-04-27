@@ -2,6 +2,7 @@ import falcon
 import json
 from db import Session
 from resources.user import UserRegister, UserAuth, AuthMiddleware
+from resources.store import StoreResource, StoreListResource
 
 class SQLAlchemySessionManager:
     def process_resource(self, req, resp, resource, params):
@@ -23,7 +24,8 @@ app = falcon.API(middleware=[
     SQLAlchemySessionManager(),
 ])
 
-r = Resource()
-app.add_route('/', r)
+app.add_route('/', Resource())
 app.add_route('/register', UserRegister())
 app.add_route('/auth', UserAuth())
+app.add_route('/store/{name}', StoreResource())
+app.add_route('/stores', StoreListResource())

@@ -5,7 +5,7 @@ from db import Base, Session
 class StoreModel(Base):
     __tablename__ = 'stores'
     id = Column(Integer, primary_key=True)
-    name = Column(String(80))
+    name = Column(String(80), unique=True)
     items = relationship('ItemModel', backref='items', lazy='dynamic')
 
     def json(self):
