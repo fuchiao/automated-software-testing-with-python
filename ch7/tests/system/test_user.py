@@ -26,3 +26,12 @@ class TestUser(testing.TestCase):
         self.assertEqual(r.status_code, 400)
         self.assertEqual(r.json, {'message':'A user with that username already exists'})
 
+    def test_access_with_auth(self):
+        self.simulate_post('/register', params={'name':'test', 'password':'pa55'})
+        auth = self.simulate_post('/auth', params={'name':'test', 'password':'pa55'},
+                                  headers={'Content-Type':'application/json'})
+        self.assertIn('access_token', auth.json)
+        r = self.simulate_get('/', headers=auth.json)
+        self.assertEqual(r.status_code, 200)
+        r = self.simulate_get('/')
+        self.assertEqual(r.status_code, 400)

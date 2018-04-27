@@ -35,3 +35,16 @@ class UserAuth:
         else:
             raise falcon.HTTPUnauthorized('Bad username/password combination', '', None)
 
+
+class AuthMiddleware:
+    def process_resource(self, req, resp, resource, params):
+        if isinstance(resource, (UserAuth, UserRegister)):
+            return
+        token = req.get_header('access_token', required=True)
+        try:
+            jwt.decode(token, JWT_ENCODE_SECRET,
+                       verify='True', algorithms=['HS256'],
+                       options={'verify_exp': True})
+        except jwt.DecodeError as err:
+            raise falcon.HTTPUnauthorized('Bad JWToken', '', None)
+

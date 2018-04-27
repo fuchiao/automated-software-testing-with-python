@@ -1,7 +1,7 @@
 import falcon
 import json
 from db import Session
-from resources.user import UserRegister, UserAuth
+from resources.user import UserRegister, UserAuth, AuthMiddleware
 
 class SQLAlchemySessionManager:
     def process_resource(self, req, resp, resource, params):
@@ -19,6 +19,7 @@ class Resource:
         resp.body = json.dumps({'message':'hello'})
 
 app = falcon.API(middleware=[
+    AuthMiddleware(),
     SQLAlchemySessionManager(),
 ])
 
