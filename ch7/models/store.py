@@ -8,28 +8,6 @@ class StoreModel(Base):
     name = Column(String(80))
     items = relationship('ItemModel', backref='items', lazy='dynamic')
 
-    def __init__(self, name):
-        self.name = name
-
-    def save(self):
-        sess = Session()
-        sess.add(self)
-        sess.commit()
-        sess.close()
-
-    def delete(self):
-        sess = Session()
-        sess.delete(self)
-        sess.commit()
-        sess.close()
-
-    @staticmethod
-    def find_by_name(name):
-        sess = Session()
-        store = sess.query(StoreModel).filter(StoreModel.name==name).first()
-        sess.close()
-        return store
-
     def json(self):
         return {
             'name':self.name,

@@ -14,7 +14,7 @@ class TestItem(TestCase):
         self.sess.close()
 
     def test_crud(self):
-        store = StoreModel('testStore')
+        store = StoreModel(name='testStore')
         item = ItemModel(name='test', price=12.99, store_id=1)
         self.assertEqual(self.sess.query(ItemModel).filter(ItemModel.name=='test').count(), 0)
 

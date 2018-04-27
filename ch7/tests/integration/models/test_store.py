@@ -12,11 +12,11 @@ class TestStore(TestCase):
         self.sess.close()
 
     def test_create_store(self):
-        store = StoreModel('testStore')
+        store = StoreModel(name='testStore')
         self.assertEqual(store.items.count(), 0)
 
     def test_crud(self):
-        store = StoreModel('testStore')
+        store = StoreModel(name='testStore')
         self.assertEqual(self.sess.query(StoreModel).filter(StoreModel.name=='testStore').count(), 0)
 
         self.sess.add(store)
@@ -28,8 +28,8 @@ class TestStore(TestCase):
         self.assertEqual(self.sess.query(StoreModel).filter(StoreModel.name=='testStore').count(), 0)
 
     def test_store_relationship(self):
-        store = StoreModel('testStore')
-        item = ItemModel('testItem', 12.99, 1)
+        store = StoreModel(name='testStore')
+        item = ItemModel(name='testItem', price=12.99, store_id=1)
         self.sess.add(store)
         self.sess.add(item)
         self.sess.commit()
@@ -38,7 +38,7 @@ class TestStore(TestCase):
         self.assertEqual(items[0].name, 'testItem')
 
     def test_store_json(self):
-        store = StoreModel('testStore')
+        store = StoreModel(name='testStore')
         expected = {
             'name':'testStore',
             'items':[],
