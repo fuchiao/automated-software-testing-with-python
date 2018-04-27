@@ -1,6 +1,12 @@
+from datetime import datetime, timedelta
 import json
 import falcon
+import jwt
 from models.user import UserModel
+
+TOKEN_EXPIRED_SECONDS=3600
+JWT_ENCODE_SECRET='THIS_IS_SECRET'
+
 class UserRegister:
     def on_post(self, req, resp):
         name = req.get_param('name')
@@ -14,4 +20,18 @@ class UserRegister:
             self.session.commit()
             resp.status = falcon.HTTP_201
             resp.body = json.dumps({'message': 'User created successfully'})
+
+class UserAuth:
+    def on_post(self, req, resp):
+        name = req.get_param('name')
+        password = req.get_param('password')
+        user = self.session.query(UserModel).filter(UserModel.name==name).first()
+        if user and user.password == password:
+            token = jwt.encode({
+                    'user_identifier': user.name,
+                    'exp': datetime.utcnow()+timedelta(seconds=TOKEN_EXPIRED_SECONDS),
+                }, JWT_ENCODE_SECRET, algorithm='HS256').decode("utf-8")
+            resp.body = json.dumps({'access_token':token})
+        else:
+            raise falcon.HTTPUnauthorized('Bad username/password combination', '', None)
 

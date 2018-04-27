@@ -16,11 +16,9 @@ class TestUser(testing.TestCase):
 
     def test_register_and_login(self):
         self.simulate_post('/register', params={'name':'test', 'password':'pa55'})
-        ''' FIXME: /auth is not ready
         auth = self.simulate_post('/auth', params={'name':'test', 'password':'pa55'},
                                   headers={'Content-Type':'application/json'})
         self.assertIn('access_token', auth.json)
-        '''
 
     def test_register_duplicate(self):
         self.simulate_post('/register', params={'name':'test', 'password':'pa55'})
