@@ -3,6 +3,7 @@ import json
 from db import Session
 from resources.user import UserRegister, UserAuth, AuthMiddleware
 from resources.store import StoreResource, StoreListResource
+from resources.item import ItemResource, ItemListResource
 
 class SQLAlchemySessionManager:
     def process_resource(self, req, resp, resource, params):
@@ -29,3 +30,5 @@ app.add_route('/register', UserRegister())
 app.add_route('/auth', UserAuth())
 app.add_route('/store/{name}', StoreResource())
 app.add_route('/stores', StoreListResource())
+app.add_route('/item/{name}', ItemResource())
+app.add_route('/items', ItemListResource())

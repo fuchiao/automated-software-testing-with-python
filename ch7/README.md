@@ -17,6 +17,7 @@ Reference
 * https://eshlox.net/2017/07/28/integrate-sqlalchemy-with-falcon-framework/
 * http://tech.colla.me/zh/show/token_session_cookie
 * http://falcon.readthedocs.io/en/stable/user/quickstart.html
+* http://falcon.readthedocs.io/en/stable/api/errors.html
 
 run database service on docker
 ```

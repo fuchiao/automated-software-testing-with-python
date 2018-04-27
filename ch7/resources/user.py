@@ -40,7 +40,7 @@ class AuthMiddleware:
     def process_resource(self, req, resp, resource, params):
         if isinstance(resource, (UserAuth, UserRegister)):
             return
-        token = req.get_header('access_token', required=True)
+        token = req.get_header('access_token', default='')
         try:
             jwt.decode(token, JWT_ENCODE_SECRET,
                        verify='True', algorithms=['HS256'],

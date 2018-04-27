@@ -34,4 +34,4 @@ class TestUser(testing.TestCase):
         r = self.simulate_get('/', headers=auth.json)
         self.assertEqual(r.status_code, 200)
         r = self.simulate_get('/')
-        self.assertEqual(r.status_code, 400)
+        self.assertEqual(r.status_code, 401)
