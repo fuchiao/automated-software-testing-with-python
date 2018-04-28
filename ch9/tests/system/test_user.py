@@ -31,7 +31,7 @@ class TestUser(testing.TestCase):
         auth = self.simulate_post('/auth', params={'name':'test', 'password':'pa55'},
                                   headers={'Content-Type':'application/json'})
         self.assertIn('access_token', auth.json)
-        headers={'Authorization':'JWT {}'.format(auth.json['access_token'])}
+        headers={'Authorization':'Bearer {}'.format(auth.json['access_token'])}
         r = self.simulate_get('/', headers=headers)
         self.assertEqual(r.status_code, 200)
         r = self.simulate_get('/')

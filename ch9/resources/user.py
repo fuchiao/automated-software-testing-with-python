@@ -41,15 +41,14 @@ class AuthMiddleware:
         if isinstance(resource, (UserAuth, UserRegister)):
             return
         try:
-            authType,credential=req.get_header('Authorization',default='JWT ').split(' ')
-            jwt.decode(credential, JWT_ENCODE_SECRET,
+            scheme,token=req.get_header('Authorization',default='Bearer ').split(' ')
+            jwt.decode(token, JWT_ENCODE_SECRET,
                        verify='True', algorithms=['HS256'],
                        options={'verify_exp': True})
+            if scheme != 'Bearer':
+                raise falcon.HTTPUnauthorized(description=scheme+' not supported')
         except jwt.DecodeError as err:
             raise falcon.HTTPUnauthorized(description='Bad JWToken')
         except ValueError as err:
             raise falcon.HTTPUnauthorized(description='Bad Authorization Header')
-        else:
-            if authType != 'JWT':
-                raise falcon.HTTPUnauthorized(description=authType+' not supported')
 

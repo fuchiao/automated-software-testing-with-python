@@ -13,7 +13,7 @@ class TestStore(testing.TestCase):
         self.simulate_post('/register', params={'name':'test', 'password':'pa55'})
         auth = self.simulate_post('/auth', params={'name':'test', 'password':'pa55'},
                                   headers={'Content-Type':'application/json'})
-        self.headers={'Authorization':'JWT {}'.format(auth.json['access_token'])}
+        self.headers={'Authorization':'Bearer {}'.format(auth.json['access_token'])}
         # r = self.simulate_get('/', headers=self.access_token)
     def tearDown(self):
         self.sess.close()
