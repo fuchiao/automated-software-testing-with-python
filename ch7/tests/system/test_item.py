@@ -13,7 +13,7 @@ class TestItem(testing.TestCase):
         self.simulate_post('/register', params={'name':'test', 'password':'pa55'})
         auth = self.simulate_post('/auth', params={'name':'test', 'password':'pa55'},
                                   headers={'Content-Type':'application/json'})
-        self.access_token = auth.json
+        self.headers={'Authorization':'JWT {}'.format(auth.json['access_token'])}
         # r = self.simulate_get('/', headers=self.access_token)
     def tearDown(self):
         self.sess.close()
@@ -23,7 +23,7 @@ class TestItem(testing.TestCase):
         self.assertEqual(r.status_code, 401)
 
     def test_item_not_found(self):
-        r = self.simulate_get('/item/testStore', headers=self.access_token)
+        r = self.simulate_get('/item/testStore', headers=self.headers)
         self.assertEqual(r.status_code, 404)
 
     def test_item_found(self):
@@ -34,7 +34,7 @@ class TestItem(testing.TestCase):
         item = ItemModel(name='testItem', price=12.99, store_id=store.id)
         self.sess.add(item)
         self.sess.commit()
-        r = self.simulate_get('/item/testItem', headers=self.access_token)
+        r = self.simulate_get('/item/testItem', headers=self.headers)
         self.assertEqual(r.status_code, 200)
         self.assertDictEqual({'name':'testItem', 'price':12.99}, r.json)
 
@@ -46,7 +46,7 @@ class TestItem(testing.TestCase):
         item = ItemModel(name='testItem', price=12.99, store_id=store.id)
         self.sess.add(item)
         self.sess.commit()
-        r = self.simulate_delete('/item/testItem', headers=self.access_token)
+        r = self.simulate_delete('/item/testItem', headers=self.headers)
         self.assertEqual(r.status_code, 200)
         self.assertDictEqual({'message':'Item deleted'}, r.json)
 
@@ -57,7 +57,7 @@ class TestItem(testing.TestCase):
         self.sess.flush()
         r = self.simulate_post('/item/test',
                                params={'price':12.99, 'store_id':store.id},
-                               headers=self.access_token)
+                               headers=self.headers)
         self.assertEqual(r.status_code, 201)
         self.assertDictEqual({'name':'test', 'price':12.99}, r.json)
 
@@ -68,10 +68,10 @@ class TestItem(testing.TestCase):
         self.sess.flush()
         self.simulate_post('/item/test',
                            params={'price':12.99, 'store_id':store.id},
-                           headers=self.access_token)
+                           headers=self.headers)
         r = self.simulate_post('/item/test',
                                params={'price':12.99, 'store_id':store.id},
-                               headers=self.access_token)
+                               headers=self.headers)
         self.assertEqual(r.status_code, 400)
 
     def test_put_item(self):
@@ -81,7 +81,7 @@ class TestItem(testing.TestCase):
         self.sess.flush()
         r = self.simulate_put('/item/test',
                               params={'price':12.99, 'store_id':store.id},
-                              headers=self.access_token)
+                              headers=self.headers)
         self.assertEqual(r.status_code, 200)
         self.assertDictEqual({'name':'test', 'price':12.99}, r.json)
 
@@ -92,10 +92,10 @@ class TestItem(testing.TestCase):
         self.sess.flush()
         self.simulate_put('/item/test',
                           params={'price':12.99, 'store_id':store.id},
-                          headers=self.access_token)
+                          headers=self.headers)
         r = self.simulate_put('/item/test',
                               params={'price':10.99, 'store_id':store.id},
-                              headers=self.access_token)
+                              headers=self.headers)
         self.assertEqual(r.status_code, 200)
         self.assertDictEqual({'name':'test', 'price':10.99}, r.json)
 
@@ -107,7 +107,7 @@ class TestItem(testing.TestCase):
         item = ItemModel(name='testItem', price=12.99, store_id=store.id)
         self.sess.add(item)
         self.sess.commit()
-        r = self.simulate_get('/items', headers=self.access_token)
+        r = self.simulate_get('/items', headers=self.headers)
         self.assertEqual(r.status_code, 200)
         self.assertDictEqual({'items':[{'name':'testItem', 'price':12.99}]}, r.json)
 
