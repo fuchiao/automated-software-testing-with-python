@@ -1,23 +1,12 @@
-# ch7 #
+# ch9 #
 
 ----
 
-this codes are adapted from ch6
+this codes are adapted from ch7
 
 we add some new feature
 
-* add userModel and allow users login
-* implement resources
-* authentication by jwt
-* add system tests for resources and authentication
-
-Reference
-
-* https://github.com/trendiguru/falcon-jwt/blob/master/falcon_jwt.py
-* https://eshlox.net/2017/07/28/integrate-sqlalchemy-with-falcon-framework/
-* http://tech.colla.me/zh/show/token_session_cookie
-* http://falcon.readthedocs.io/en/stable/user/quickstart.html
-* http://falcon.readthedocs.io/en/stable/api/errors.html
+* drone ci
 
 run database service on docker
 ```
