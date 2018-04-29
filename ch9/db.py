@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 Base = declarative_base()
 DB_USER='postgres'
 DB_PASS='pa55'
-DB_HOST='127.0.0.1'
+DB_HOST='postgres'
 DB_PORT='5432'
 DB_NAME='ch9'
 DB_ENGINE='postgresql://{}:{}@{}:{}'.format(DB_USER, DB_PASS, DB_HOST, DB_PORT)

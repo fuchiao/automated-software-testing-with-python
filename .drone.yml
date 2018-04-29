@@ -1,0 +1,12 @@
+pipeline:
+    build:
+        image: python:3
+        commands:
+            - cd ch9
+            - pip install -r requirements.txt
+            - python -m unittest
+services:
+    postgres:
+        image: postgres
+        environment:
+            - POSTGRES_PASSWORD=pa55
